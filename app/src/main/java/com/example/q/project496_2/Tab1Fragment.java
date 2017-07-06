@@ -1,35 +1,41 @@
 package com.example.q.project496_2;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.ListView;
 
 /**
  * Created by q on 2017-07-06.
  */
 
 public class Tab1Fragment extends Fragment{
-    private static final String TAG = "tab1_Fragment";
-    private Button btnTEST;
 
-    @Nullable
+    CustomAddressAdapter adapter;
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.tab1_fragment, container , false);
-        btnTEST = (Button) view.findViewById(R.id.btnTest1);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        adapter = new CustomAddressAdapter();
+        View view = inflater.inflate(R.layout.tab1_fragment, container, false);
 
-        btnTEST.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "BUTTON CLICK 1", Toast.LENGTH_SHORT).show();
-            }
-        });
+        ListView tab1_listview = (ListView) view.findViewById(R.id.tab1_listview);
+
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.pink), "Pink", "010-1234-5678");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.peach), "Peach", "010-9012-3456");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.green), "Green", "010-7890-1234");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.gray), "Gray", "010-1234-5678");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.purple), "Purple", "010-9012-3456");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.red), "Red", "010-7890-1234");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.skyblue), "Skyblue", "010-1234-5678");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.yellow), "Yellow", "010-9012-3456");
+        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.yellow2), "Yellow2", "010-7890-1234");
+
+        tab1_listview.setAdapter(adapter);
+
         return view;
     }
-
 }
