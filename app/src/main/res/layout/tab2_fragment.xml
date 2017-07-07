@@ -11,6 +11,11 @@
         android:layout_height="wrap_content"
         android:text="TESTBTN 2" />
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <GridView
         android:id="@+id/grid_view"
         android:layout_width="match_parent"

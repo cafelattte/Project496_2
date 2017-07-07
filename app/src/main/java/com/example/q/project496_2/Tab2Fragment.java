@@ -19,6 +19,12 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
@@ -33,9 +39,16 @@ public class Tab2Fragment extends Fragment{
     private static final int MY_PERMISSION = 1;
     private ArrayList<String> thumbsIDsList;
     private ArrayList<String> thumbsDatasList;
+    CallbackManager callbackManager;
     myGridAdapter gridAdapter;
     private Button btnTEST;
     private GridView gridView;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        callbackManager= CallbackManager.Factory.create();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,6 +56,9 @@ public class Tab2Fragment extends Fragment{
 
         btnTEST = (Button)view.findViewById(R.id.btnTest2);
         gridView = (GridView)view.findViewById(R.id.grid_view);
+        LoginButton loginButton = (LoginButton)view.findViewById(R.id.login_button);
+        loginButton.setReadPermissions("email");
+        loginButton.setFragment(this);
 
         thumbsIDsList=new ArrayList<String>();
         thumbsDatasList =new ArrayList<String>();
@@ -50,6 +66,22 @@ public class Tab2Fragment extends Fragment{
         getThumbInfo(thumbsIDsList,thumbsDatasList);
         gridAdapter = new myGridAdapter(getContext(),thumbsDatasList, thumbsIDsList);
 
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
         btnTEST.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,9 +94,11 @@ public class Tab2Fragment extends Fragment{
     }
 
     public void doTakePhotoAction(){
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-
-        startActivityForResult(intent,TAKE_PHOTO);
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, TAKE_PHOTO);
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent,TAKE_PHOTO);}
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -109,6 +143,13 @@ public class Tab2Fragment extends Fragment{
 
                 }else{
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION);}}
+            case TAKE_PHOTO:{
+                if (grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
+
+                }else{
+                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},TAKE_PHOTO);
+                }
+            }
         }
     }
 
