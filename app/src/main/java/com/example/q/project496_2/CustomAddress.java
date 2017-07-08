@@ -1,17 +1,16 @@
 package com.example.q.project496_2;
 
-import android.graphics.drawable.Drawable;
 
 /**
  * Created by q on 2017-07-06.
  */
 
 public class CustomAddress {
-    private Drawable image;
+    private int image;
     private String name;
     private String number;
 
-    public void setAdrsimage (Drawable adrsimage) {
+    public void setAdrsimage (int adrsimage) {
         image = adrsimage;
     }
     public void setAdrsname (String adrsname) {
@@ -20,7 +19,7 @@ public class CustomAddress {
     public void setAdrsnumber (String adrsnumber) {
         number = adrsnumber;
     }
-    public Drawable getAdrsimage () {
+    public int getAdrsimage () {
         return this.image;
     }
     public String getAdrsname () {

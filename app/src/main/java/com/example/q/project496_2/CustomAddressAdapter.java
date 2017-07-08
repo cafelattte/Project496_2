@@ -13,7 +13,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by q on 2017-07-06.
@@ -56,7 +57,7 @@ public class CustomAddressAdapter extends BaseAdapter {
 
         CustomAddress customAddress = customAddressList.get(i);
 
-        adrs_image.setImageDrawable(customAddress.getAdrsimage());
+        Glide.with(getApplicationContext()).load(customAddress.getAdrsimage()).into(adrs_image);
 
         adrs_name.setText(customAddress.getAdrsname());
         adrs_number.setText(customAddress.getAdrsnumber());
@@ -64,7 +65,7 @@ public class CustomAddressAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addAddress(Drawable img, String name, String number) {
+    public void addAddress(int img, String name, String number) {
         CustomAddress address = new CustomAddress();
 
         address.setAdrsimage(img);

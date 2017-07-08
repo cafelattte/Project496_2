@@ -24,15 +24,15 @@ public class Tab1Fragment extends Fragment{
 
         ListView tab1_listview = (ListView) view.findViewById(R.id.tab1_listview);
 
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.pink), "Pink", "010-1234-5678");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.peach), "Peach", "010-9012-3456");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.green), "Green", "010-7890-1234");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.gray), "Gray", "010-1234-5678");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.purple), "Purple", "010-9012-3456");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.red), "Red", "010-7890-1234");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.skyblue), "Skyblue", "010-1234-5678");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.yellow), "Yellow", "010-9012-3456");
-        adapter.addAddress(ContextCompat.getDrawable(getActivity(), R.drawable.yellow2), "Yellow2", "010-7890-1234");
+        adapter.addAddress(R.drawable.pink, "Pink", "010-1234-5678");
+        adapter.addAddress(R.drawable.peach, "Peach", "010-9012-3456");
+        adapter.addAddress(R.drawable.green, "Green", "010-7890-1234");
+        adapter.addAddress(R.drawable.gray, "Gray", "010-1234-5678");
+        adapter.addAddress(R.drawable.purple, "Purple", "010-9012-3456");
+        adapter.addAddress(R.drawable.red, "Red", "010-7890-1234");
+        adapter.addAddress(R.drawable.skyblue, "Skyblue", "010-1234-5678");
+        adapter.addAddress(R.drawable.yellow, "Yellow", "010-9012-3456");
+        adapter.addAddress(R.drawable.yellow2, "Yellow2", "010-7890-1234");
 
         tab1_listview.setAdapter(adapter);
 
