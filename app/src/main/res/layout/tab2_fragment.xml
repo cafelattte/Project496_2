@@ -5,6 +5,13 @@
     android:layout_height="match_parent"
     android:weightSum="1">
 
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -12,17 +19,19 @@
 
         <Button
             android:id="@+id/btnTest2"
-            android:layout_width="wrap_content"
-            android:layout_height="55dp"
+            android:layout_width="60dp"
+            android:layout_height="50dp"
             android:layout_weight="1"
-            android:background="@android:drawable/ic_menu_camera"
-            android:text="촬영" />
-    </LinearLayout>
+            android:background="@android:drawable/ic_menu_camera" />
 
-    <com.facebook.login.widget.LoginButton
-        android:id="@+id/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="TextView" />
+
+    </LinearLayout>
 
     <GridView
         android:id="@+id/grid_view"

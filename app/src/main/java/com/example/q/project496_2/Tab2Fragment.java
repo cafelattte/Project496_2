@@ -4,10 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -17,11 +14,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -30,14 +27,8 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
-
 import org.json.JSONObject;
-
-import java.io.File;
-import java.net.URI;
 import java.util.ArrayList;
-
-import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by q on 2017-07-06.
@@ -47,13 +38,18 @@ public class Tab2Fragment extends Fragment{
     private static final String TAG = "tab2_Fragment";
     private static final int TAKE_PHOTO = 2;
     private static final int MY_PERMISSION = 1;
+
     private ArrayList<String> thumbsIDsList;
     private ArrayList<String> thumbsDatasList;
-    CallbackManager callbackManager;
     myGridAdapter gridAdapter;
+
+    CallbackManager callbackManager;
     private AccessToken mToken;
+    private LoginButton loginButton = null;
+
     private Button btnTEST;
     private GridView gridView;
+    private TextView text;
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -75,25 +71,21 @@ public class Tab2Fragment extends Fragment{
 
         btnTEST = (Button)view.findViewById(R.id.btnTest2);
         gridView = (GridView)view.findViewById(R.id.grid_view);
+        text = (TextView)view.findViewById(R.id.textView);
 
         if (mToken == null){
-            LoginButton loginButton = (LoginButton)view.findViewById(R.id.login_button);
+            loginButton = (LoginButton)view.findViewById(R.id.login_button);
             loginButton.setReadPermissions("email","public_profile","user_friends");
             loginButton.setFragment(this);
             loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
                 @Override
                 public void onSuccess(LoginResult loginResult) {
-                    GraphRequest request;
                     mToken = loginResult.getAccessToken();
-                    request = GraphRequest.newMeRequest(mToken,jsonObjectCallback);
-                    Bundle parameters = new Bundle();
-                    parameters.putString("fields","id,name,email,gender,birthday,cover");
-                    request.setParameters(parameters);
-                    request.executeAsync();
                 }
 
                 @Override
                 public void onCancel() {
+                    Toast.makeText(getContext(),"User sign in canceled",Toast.LENGTH_LONG).show();
                     Log.d("TAG","Canceled");
                 }
 
@@ -102,14 +94,12 @@ public class Tab2Fragment extends Fragment{
                     error.printStackTrace();
                 }
             });
-        }else{
-            GraphRequest request;
-            request = GraphRequest.newMeRequest(mToken,jsonObjectCallback);
-            Bundle parameters = new Bundle();
-            parameters.putString("fields","id,name,email,gender,birthday,cover");
-            request.setParameters(parameters);
-            request.executeAsync();
         }
+        Bundle parameters = new Bundle();
+        parameters.putString("fields","id,name,email,gender,picture,taggable_friends");//id, name, email, gender, picture of the user.
+        GraphRequest request = GraphRequest.newMeRequest(mToken,jsonObjectCallback);
+        request.setParameters(parameters);
+        request.executeAsync();
 
         thumbsIDsList=new ArrayList<String>();
         thumbsDatasList =new ArrayList<String>();
@@ -124,6 +114,14 @@ public class Tab2Fragment extends Fragment{
             }
         });
         gridView.setAdapter(gridAdapter);
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long l_position){
+                Intent intent = new Intent(getContext(),Image_activity.class);
+                intent.putExtra("img",thumbsDatasList.get(position));
+                startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -131,7 +129,22 @@ public class Tab2Fragment extends Fragment{
     GraphRequest.GraphJSONObjectCallback jsonObjectCallback = new GraphRequest.GraphJSONObjectCallback() {
         @Override
         public void onCompleted(JSONObject object, GraphResponse response) {
+            Log.d("TAG","페이스북 로그인 결과"+response.toString());
 
+            try{
+                String email = object.getString("email");
+                String name = object.getString("name");
+                String gender = object.getString("gender");
+                String whole = object.getString("picture");
+                String friends = object.getString("taggable_friends");
+
+                Log.d("TAG","페이스북 이메일-> "+email);
+                Log.d("TAG","페이스북 이름-> "+name);
+                Log.d("TAG","페이스북 성별-> "+gender);
+
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
     };
 
