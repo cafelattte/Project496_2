@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -28,6 +30,8 @@ import com.facebook.login.widget.LoginButton;
 import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by q on 2017-07-06.
@@ -98,13 +102,9 @@ public class Tab2Fragment extends Fragment{
             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, TAKE_PHOTO);
         } else {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startActivityForResult(intent,TAKE_PHOTO);}
+            startActivity(intent);
+        }
     }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        data.getData();
-    }
-
 
     private void getThumbInfo(ArrayList<String> thumbsIds, ArrayList<String> thumbsDatas){
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -145,7 +145,7 @@ public class Tab2Fragment extends Fragment{
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, MY_PERMISSION);}}
             case TAKE_PHOTO:{
                 if (grantResults.length>0&&grantResults[0]==PackageManager.PERMISSION_GRANTED){
-
+                    doTakePhotoAction();
                 }else{
                     ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.CAMERA},TAKE_PHOTO);
                 }

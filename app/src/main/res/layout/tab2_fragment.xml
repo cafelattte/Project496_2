@@ -8,8 +8,9 @@
     <Button
         android:id="@+id/btnTest2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TESTBTN 2" />
+        android:layout_height="55dp"
+        android:background="@android:drawable/ic_menu_camera"
+        android:text="촬영" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
