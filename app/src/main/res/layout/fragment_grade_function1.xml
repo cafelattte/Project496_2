@@ -5,9 +5,17 @@
     tools:context="com.example.q.project496_2.grade_function1">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:text="TextView"
+        android:textAlignment="center" />
+
+    <ListView
+        android:id="@+id/ListView2"
+        android:layout_width="match_parent"
+        android:layout_height="540dp" />
 </FrameLayout>
