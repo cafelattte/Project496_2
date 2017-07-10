@@ -47,6 +47,8 @@ public class Tab2Fragment extends Fragment{
     private AccessToken mToken;
     private LoginButton loginButton = null;
 
+    JSONObject friends;
+
     private Button btnTEST;
     private GridView gridView;
     private TextView text;
@@ -136,7 +138,7 @@ public class Tab2Fragment extends Fragment{
                 String name = object.getString("name");
                 String gender = object.getString("gender");
                 String whole = object.getString("picture");
-                String friends = object.getString("taggable_friends");
+                friends = object.getJSONObject("taggable_friends");
 
                 Log.d("TAG","페이스북 이메일-> "+email);
                 Log.d("TAG","페이스북 이름-> "+name);

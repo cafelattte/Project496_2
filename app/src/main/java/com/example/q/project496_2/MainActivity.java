@@ -26,6 +26,9 @@ public class MainActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.add(R.id.container,new Tab2Fragment());
         fragmentTransaction.commit();
+        FragmentTransaction fragmentTransaction1 = fragmentManager.beginTransaction();
+        fragmentTransaction1.add(R.id.container,new Tab1Fragment());
+        fragmentTransaction1.commit();
 
         mSectionsPageAdapter = new SectionsPageAdapter(getSupportFragmentManager());
 

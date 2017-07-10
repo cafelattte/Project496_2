@@ -3,6 +3,7 @@ package com.example.q.project496_2;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,6 +70,15 @@ public class CustomAddressAdapter extends BaseAdapter {
         CustomAddress address = new CustomAddress();
 
         address.setAdrsimage(img);
+        address.setAdrsname(name);
+        address.setAdrsnumber(number);
+
+        customAddressList.add(address);
+    }
+    public void addAddress(Uri uri, String name, String number){
+        CustomAddress address = new CustomAddress();
+
+        address.setAdrsimage(uri);
         address.setAdrsname(name);
         address.setAdrsnumber(number);
 
