@@ -36,7 +36,7 @@ public class Tab1Fragment extends Fragment{
     JSONArray friends_array = null;
     private AccessToken mToken;
     GraphRequest request;
-    GraphResponse s;
+    GraphResponse lastResponse;
 
     @Override
     public void onSaveInstanceState(Bundle outState){
@@ -65,6 +65,7 @@ public class Tab1Fragment extends Fragment{
         adapter.addAddress(R.drawable.skyblue, "Skyblue", "010-1234-5678");
         adapter.addAddress(R.drawable.yellow, "Yellow", "010-9012-3456");
         adapter.addAddress(R.drawable.yellow2, "Yellow2", "010-7890-1234");
+        //sendRequest();
 
         tab1_listview.setAdapter(adapter);
         return view;
@@ -73,7 +74,7 @@ public class Tab1Fragment extends Fragment{
         @Override
         public void onCompleted(JSONObject object, GraphResponse response) {
             Log.d("TAG","페이스북 로그인 결과"+response.toString());
-
+            setResponse(response);
             try{
                 String email = object.getString("email");
                 String name = object.getString("name");
@@ -94,18 +95,7 @@ public class Tab1Fragment extends Fragment{
                 if (!friends.isNull("paging")){
                     JSONObject paging = friends.getJSONObject("paging");
                     if (!paging.isNull("next")){
-                        //JSONObject present_cursor = paging.getJSONObject("cursors");
-                        String prev_after = paging.getString("next");
-                        Bundle params = new Bundle();
-                        params.putString("fields","taggable_friends");
-                        params.putString("before",prev_after);
-                        //GraphRequest nextRequest =new GraphRequest(mToken,personId+"/taggable_friends",null,HttpMethod.GET,graphCallback);
-/*                        GraphRequest res = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
-                        res.setCallback(graphCallback);
-                        res.executeAsync();
-*/
-                        //nextRequest.setParameters(params);
-                        //nextRequest.executeAsync();
+                        sendRequest();
                     }
                 }
 
@@ -119,6 +109,18 @@ public class Tab1Fragment extends Fragment{
             }
         }
     };
+
+    public void setResponse(GraphResponse response){
+        lastResponse = response;
+    }
+
+    public void sendRequest(){
+        if (lastResponse!= null){
+            GraphRequest res = lastResponse.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+            res.setAccessToken(mToken);
+            res.setCallback(graphCallback);
+            res.executeAsync();}
+    }
 
     GraphRequest.Callback graphCallback = new GraphRequest.Callback(){
             @Override

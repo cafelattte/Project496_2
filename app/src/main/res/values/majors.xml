@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="majors">
+        <item>건설및환경공학과</item>
+        <item>기계공학과</item>
+        <item>기술경영학부</item>
+        <item>물리학과</item>
+        <item>바이오및뇌공학과</item>
+        <item>산업디자인학과</item>
+        <item>산업및시스템공학과</item>
+        <item>수리과학과</item>
+        <item>생명과학과</item>
+        <item>생명화학공학과</item>
+        <item>신소재공학과</item>
+        <item>원자력및양자공학과</item>
+        <item>전기및전자공학부</item>
+        <item>전산학부</item>
+        <item>항공우주공학과</item>
+        <item>화학과</item>
+    </string-array>
+</resources>

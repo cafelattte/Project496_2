@@ -39,5 +39,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Image_activity"></activity>
+        <activity android:name=".Tab3_expanded"
+            android:theme="@style/AppTheme.NoActionBar"
+            ></activity>
     </application>
 </manifest>
