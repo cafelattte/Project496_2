@@ -80,7 +80,7 @@ public class Tab3_expanded extends AppCompatActivity {
                 connection.setUseCaches(false);
                 connection.setConnectTimeout(10000);
                 connection.setRequestProperty("과", "뭐");
-                
+
                 connection.setDoOutput(true);
 
                 OutputStream os = connection.getOutputStream();
