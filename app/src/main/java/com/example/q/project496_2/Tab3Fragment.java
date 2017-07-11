@@ -5,7 +5,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -88,55 +86,65 @@ public class Tab3Fragment extends Fragment{
 
         @Override
         protected String doInBackground(String... params) {
-            URL url = null;
-            HttpURLConnection connection = null;
             String res_msg = null;
 
-            try {
-//                JSONObject param = new JSONObject();
-//                Reader in = getContext().getResources().openRawResource(R.raw.current);
-                InputStream in = getContext().getResources().openRawResource(R.raw.current);
-                JSONArray job;
-                parse ap = new parse();
-                job = ap.parser2(ap.parse1(in));
-                String body = job.toString();
-                System.out.println(body);
+            int i;
+            for (i = 0; i < 2; i++) {
+                URL url = null;
+                HttpURLConnection connection = null;
+                try {
+                    url = new URL(params[0]);
+                    connection = (HttpURLConnection) url.openConnection();
 
-                url = new URL(params[0]);
-                connection = (HttpURLConnection) url.openConnection();
+                    connection.setRequestMethod("POST");
+                    connection.setUseCaches(false);
+                    connection.setConnectTimeout(10000);
+                    connection.setRequestProperty("Content-Type","application/json");
+                    connection.setDoOutput(true);
 
-                connection.setRequestMethod("POST");
-                connection.setUseCaches(false);
-                connection.setConnectTimeout(10000);
-                connection.setRequestProperty("Content-Type","application/json");
-                connection.setDoOutput(true);
+                    JSONArray job = null;
+                    InputStream in = null;
+                    if (i == 0) {
+                        in = getContext().getResources().openRawResource(R.raw.current);
+                    } else if (i == 1) {
+                        in = getContext().getResources().openRawResource(R.raw.previous);
+                    }
+                    parse ap = new parse();
+                    if (i == 0) {
+                        job = ap.parser2(ap.parserparser(in));
+                    } else if (i == 1) {
+                        job = ap.parser1(ap.parserparser(in));
+                    }
+                    String body = job.toString();
+                    System.out.println(body);
+                    OutputStream os = connection.getOutputStream();
+                    os.write(body.getBytes("UTF-8"));
+                    os.flush();
+                    os.close();
 
-                OutputStream os = connection.getOutputStream();
-                os.write(body.getBytes("UTF-8"));
-                os.flush();
-                os.close();
-
-                int resCode = connection.getResponseCode();
-                if (HttpURLConnection.HTTP_OK == resCode) {
-                    res_msg = getTextFrom(connection.getInputStream());
-                    if ("{result: 1}".equals(res_msg)) {
-                        sendingDBcompleted = true;
-                    } else if ("{result: 0".equals(res_msg)){
+                    int resCode = connection.getResponseCode();
+                    if (HttpURLConnection.HTTP_OK == resCode) {
+                        res_msg = getTextFrom(connection.getInputStream());
+                        if ("{result: 1}".equals(res_msg)) {
+                            sendingDBcompleted = true;
+                        } else if ("{result: 0".equals(res_msg)){
+                            sendingDBcompleted = false;
+                        }
+                    } else {
+                        res_msg = connection.getResponseCode() + "-" + connection.getResponseMessage();
                         sendingDBcompleted = false;
                     }
-                } else {
-                    res_msg = connection.getResponseCode() + "-" + connection.getResponseMessage();
-                    sendingDBcompleted = false;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    this.sendingDBcompleted = false;
                 }
 
-            } catch (Exception e) {
-                e.printStackTrace();
-                this.sendingDBcompleted = false;
+                if (connection != null) {
+                    connection.disconnect();
+                }
             }
 
-            if (connection != null) {
-                connection.disconnect();
-            }
             return res_msg;
         }
 
@@ -163,7 +171,7 @@ public class Tab3Fragment extends Fragment{
         }
 
         public class parse {
-            public ArrayList<String[]> parse1(InputStream in) {
+            public ArrayList<String[]> parserparser(InputStream in) {
                 ArrayList<String> list = new ArrayList<String>();
                 try{
                     BufferedReader input_br = null;
@@ -195,6 +203,67 @@ public class Tab3Fragment extends Fragment{
                         subject[j] = tokens.nextToken();}
 
                     result.add(subject);
+                }
+                return result;
+            }
+
+            public JSONArray parser1(ArrayList<String[]> text){//이전 학기용
+                ArrayList<Integer> ho = new ArrayList<Integer>();
+                for (int i =0; i<text.size(); i++) {
+                    if (text.get(i).length==1) {
+                        ho.add(i);
+                    }
+                }
+                for (int i=ho.size()-1;i>=0; i--) {
+                    int index = ho.get(i);
+                    text.remove(index+1);
+                    text.remove(index);
+                }
+
+                JSONArray result = new JSONArray();
+                for (int i =0; i< text.size(); i++) {
+                    JSONObject object = new JSONObject();
+                    int size = text.get(i).length;//11이면 분반 없음, 12면 분반 있음.
+                    String[] list = text.get(i);
+                    String Grades;
+                    String Course_type;
+                    String Course_title;
+                    String Repeat;
+                    int AU;
+                    int Credits;
+                    if (size ==11) {
+                        Course_type = list[4];
+                        Course_title = list[5];
+                        Credits = Integer.parseInt(list[6]);
+                        AU = Integer.parseInt(list[7]);
+                        Grades = list[9];
+                        Repeat = list[8];
+                    }
+                    else {
+                        Course_type = list[5];
+                        Course_title = list[6];
+                        Credits = Integer.parseInt(list[7]);
+                        AU = Integer.parseInt(list[8]);
+                        Grades = list[10];
+                        Repeat = list[9];
+                    }
+                    String Depart = list[1];
+                    String Code = list[2];
+                    String Course_no = list[3];
+                    try {
+                        object.put("Course_no", Course_no);
+                        object.put("Depart",Depart);
+                        object.put("Code",Code);
+                        object.put("Grades",Grades);
+                        object.put("Course_type",Course_type);
+                        object.put("Course_title",Course_title);
+                        object.put("Repeat",Repeat);
+                        object.put("Credits",Credits);
+                        object.put("AU", AU);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    result.put(object);
                 }
                 return result;
             }
@@ -250,7 +319,6 @@ public class Tab3Fragment extends Fragment{
                 return result;
             }
         }
-
 
         @Override
         public void onPostExecute(String result) {
