@@ -3,6 +3,7 @@ package com.example.q.project496_2;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;

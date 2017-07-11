@@ -47,6 +47,25 @@ public class grade_function1 extends Fragment {
 
         return view;
     }
+    private double grade(String Grade){
+        double my_grade = 0;
+        switch(Grade){
+            case "A+": my_grade= 4.3;break;
+            case "A0":my_grade = 4.0;break;
+            case "A-":my_grade = 3.7;break;
+            case "B+":my_grade = 3.3;break;
+            case "B0":my_grade = 3.0;break;
+            case "B-":my_grade = 2.7;break;
+            case "C+":my_grade = 2.3;break;
+            case "C0":my_grade = 2.0;break;
+            case "C-":my_grade = 1.7;break;
+            case "D+":my_grade = 1.3;break;
+            case "D0":my_grade = 1.0;break;
+            case "D-":my_grade = 0.7;break;
+            default: my_grade=0;break;
+        }
+        return my_grade;
+    }
 
 }
 class listAdapter extends BaseAdapter {

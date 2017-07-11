@@ -44,9 +44,7 @@ public class Tab2Fragment extends Fragment{
     private ArrayList<String> thumbsDatasList;
     myGridAdapter gridAdapter;
 
-    CallbackManager callbackManager;
     private AccessToken mToken;
-    private LoginButton loginButton = null;
 
     JSONObject friends;
 
@@ -63,7 +61,6 @@ public class Tab2Fragment extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        callbackManager= CallbackManager.Factory.create();
     }
 
     @Override
@@ -76,33 +73,6 @@ public class Tab2Fragment extends Fragment{
         gridView = (GridView)view.findViewById(R.id.grid_view);
         text = (TextView)view.findViewById(R.id.textView);
 
-        if (mToken == null){
-            loginButton = (LoginButton)view.findViewById(R.id.login_button);
-            loginButton.setReadPermissions("email","public_profile","user_friends");
-            loginButton.setFragment(this);
-            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    mToken = loginResult.getAccessToken();
-                }
-
-                @Override
-                public void onCancel() {
-                    Toast.makeText(getContext(),"User sign in canceled",Toast.LENGTH_LONG).show();
-                    Log.d("TAG","Canceled");
-                }
-
-                @Override
-                public void onError(FacebookException error) {
-                    error.printStackTrace();
-                }
-            });
-        }
-        Bundle parameters = new Bundle();
-        parameters.putString("fields","id,name,email,gender,picture,taggable_friends");//id, name, email, gender, picture of the user.
-        GraphRequest request = GraphRequest.newMeRequest(mToken,jsonObjectCallback);
-        request.setParameters(parameters);
-        request.executeAsync();
 
         thumbsIDsList=new ArrayList<String>();
         thumbsDatasList =new ArrayList<String>();
@@ -128,28 +98,6 @@ public class Tab2Fragment extends Fragment{
 
         return view;
     }
-
-    GraphRequest.GraphJSONObjectCallback jsonObjectCallback = new GraphRequest.GraphJSONObjectCallback() {
-        @Override
-        public void onCompleted(JSONObject object, GraphResponse response) {
-            Log.d("TAG","페이스북 로그인 결과"+response.toString());
-
-            try{
-                String email = object.getString("email");
-                String name = object.getString("name");
-                String gender = object.getString("gender");
-                String whole = object.getString("picture");
-                friends = object.getJSONObject("taggable_friends");
-
-                Log.d("TAG","페이스북 이메일-> "+email);
-                Log.d("TAG","페이스북 이름-> "+name);
-                Log.d("TAG","페이스북 성별-> "+gender);
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
-        }
-    };
 
     public void doTakePhotoAction(){
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {

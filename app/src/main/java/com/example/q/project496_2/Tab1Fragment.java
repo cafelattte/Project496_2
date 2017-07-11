@@ -5,17 +5,24 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.media.session.MediaControllerCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphRequestBatch;
 import com.facebook.GraphResponse;
 import com.facebook.HttpMethod;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,13 +37,12 @@ import java.net.URI;
 public class Tab1Fragment extends Fragment{
 
     CustomAddressAdapter adapter;
-
-    String personId;
+    LoginButton loginButton;
+    CallbackManager callbackManager;
     JSONObject friends;
     JSONArray friends_array = null;
     private AccessToken mToken;
     GraphRequest request;
-    GraphResponse lastResponse;
 
     @Override
     public void onSaveInstanceState(Bundle outState){
@@ -44,12 +50,42 @@ public class Tab1Fragment extends Fragment{
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        callbackManager = CallbackManager.Factory.create();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         adapter = new CustomAddressAdapter();
         View view = inflater.inflate(R.layout.tab1_fragment, container, false);
         mToken=AccessToken.getCurrentAccessToken();
+
+        if (mToken ==null){
+            loginButton = (LoginButton)view.findViewById(R.id.login_button);
+            loginButton.setReadPermissions("email","public_profile","user_friends");
+            loginButton.setFragment(this);
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    mToken = loginResult.getAccessToken();
+                }
+
+                @Override
+                public void onCancel() {
+                    Toast.makeText(getContext(),"User sign in canceled",Toast.LENGTH_LONG).show();
+                    Log.d("TAG","Canceled");
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    error.printStackTrace();
+                }
+            });
+        }
         Bundle parameters = new Bundle();
-        parameters.putString("fields","id, name,email,gender, picture,taggable_friends");//id, name, email, gender, picture of the user.
+        parameters.putString("fields","taggable_friends");
+        parameters.putInt("limit",5000);
         request = GraphRequest.newMeRequest(mToken,jsonObjectCallback);
         request.setParameters(parameters);
         request.executeAsync();
@@ -65,7 +101,6 @@ public class Tab1Fragment extends Fragment{
         adapter.addAddress(R.drawable.skyblue, "Skyblue", "010-1234-5678");
         adapter.addAddress(R.drawable.yellow, "Yellow", "010-9012-3456");
         adapter.addAddress(R.drawable.yellow2, "Yellow2", "010-7890-1234");
-        //sendRequest();
 
         tab1_listview.setAdapter(adapter);
         return view;
@@ -74,13 +109,7 @@ public class Tab1Fragment extends Fragment{
         @Override
         public void onCompleted(JSONObject object, GraphResponse response) {
             Log.d("TAG","페이스북 로그인 결과"+response.toString());
-            setResponse(response);
             try{
-                String email = object.getString("email");
-                String name = object.getString("name");
-                personId = object.getString("id");
-                String gender = object.getString("gender");
-                String image = object.getString("picture");
                 friends = object.getJSONObject("taggable_friends");
                 friends_array = friends.getJSONArray("data");
                 for (int i = 0; i < friends_array.length(); i++) {
@@ -92,46 +121,18 @@ public class Tab1Fragment extends Fragment{
                     Uri url = Uri.parse(picture.getString("url"));
                     adapter.addAddress(url, names, number);
                 }
-                if (!friends.isNull("paging")){
-                    JSONObject paging = friends.getJSONObject("paging");
-                    if (!paging.isNull("next")){
-                        sendRequest();
-                    }
-                }
-
-                Log.d("TAG","페이스북 이메일-> "+email);
-                Log.d("TAG","페이스북 이름-> "+name);
-                Log.d("TAG","페이스북 성별-> "+gender);
-                Log.d("TAG","페이스북 이미지-> "+ image);
 
             }catch(Exception error){
                 error.printStackTrace();
             }
         }
     };
-
-    public void setResponse(GraphResponse response){
-        lastResponse = response;
-    }
-
-    public void sendRequest(){
-        if (lastResponse!= null){
-            GraphRequest res = lastResponse.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
-            res.setAccessToken(mToken);
-            res.setCallback(graphCallback);
-            res.executeAsync();}
-    }
-
     GraphRequest.Callback graphCallback = new GraphRequest.Callback(){
             @Override
             public void onCompleted(GraphResponse response){
-                try {
-                    JSONObject object = response.getJSONObject();
-                    String email = object.getString("email");
-                    String name = object.getString("name");
-                    personId = object.getString("id");
-                    String gender = object.getString("gender");
-                    String image = object.getString("picture");
+                Log.d("TAG","페이스북 로그인 결과"+response.toString());
+                JSONObject object = response.getJSONObject();
+                try{
                     friends = object.getJSONObject("taggable_friends");
                     friends_array = friends.getJSONArray("data");
                     for (int i = 0; i < friends_array.length(); i++) {
@@ -143,9 +144,9 @@ public class Tab1Fragment extends Fragment{
                         Uri url = Uri.parse(picture.getString("url"));
                         adapter.addAddress(url, names, number);
                     }
-                    adapter.notifyDataSetChanged();
-                }catch (Exception e){
-                    e.printStackTrace();
+
+                }catch(Exception error){
+                    error.printStackTrace();
                 }
             }};
 }

@@ -11,6 +11,14 @@
         android:gravity="center"
         android:text="TextView" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="0.10"
+        android:gravity="center|end"
+        android:text="TextView" />
+
     <Spinner
         android:id="@+id/spinner2"
         android:layout_width="wrap_content"
