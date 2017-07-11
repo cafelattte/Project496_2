@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:text="운동/리더십"
-            android:textSize="15dp"/>
+            android:textSize="12dp"/>
     </LinearLayout>
     <ImageView
         android:layout_marginTop="8dp"
@@ -43,6 +43,7 @@
         android:layout_height="6dp"
         android:src="#00af87"/>
     <TextView
+        android:id="@+id/uptext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="필수"
@@ -56,14 +57,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="YES"
-            android:textSize="28dp"/>
+            android:textSize="20dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="NO"
-            android:textSize="28dp"/>
+            android:textSize="20dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,6 +89,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/downtext"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="선택"
@@ -101,14 +103,14 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="YES"
-            android:textSize="28dp"/>
+            android:textSize="20dp"/>
         <TextView
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
             android:text="NO"
-            android:textSize="28dp"/>
+            android:textSize="20dp"/>
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"

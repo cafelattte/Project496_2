@@ -6,11 +6,20 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -22,8 +31,9 @@ import java.net.ProtocolException;
 import java.net.URL;
 
 public class grade_function2 extends Fragment {
-
     JSONArray current= null;
+    TextView uptext;
+    TextView downtext;
 
     private class httpfunc extends AsyncTask<String, Void, String> {
         @Override
@@ -116,8 +126,48 @@ public class grade_function2 extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.fragment_grade_function3,container,false);
+        View view = inflater.inflate(R.layout.fragment_grade_function2,container,false);
         new httpfunc().execute("http://52.78.19.146:8080/previous/all");
+
+        Button btn1 = (Button) view.findViewById(R.id.btn1);
+        Button btn2 = (Button) view.findViewById(R.id.btn2);
+        Button btn3 = (Button) view.findViewById(R.id.btn3);
+        Button btn4 = (Button) view.findViewById(R.id.btn4);
+        uptext = (TextView) view.findViewById(R.id.uptext);
+        downtext = (TextView) view.findViewById(R.id.downtext);
+
+        btn1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uptext.setText("필수");
+                downtext.setText("선택");
+
+            }
+        });
+
+        btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uptext.setText("필수");
+                downtext.setText("선택");
+            }
+        });
+
+        btn3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uptext.setText("교양");
+                downtext.setText("영어");
+            }
+        });
+
+        btn4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uptext.setText("운동");
+                downtext.setText("리더십");
+            }
+        });
 
         return view;
     }

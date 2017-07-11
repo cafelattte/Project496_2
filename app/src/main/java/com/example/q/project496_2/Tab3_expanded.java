@@ -1,11 +1,13 @@
 package com.example.q.project496_2;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -94,7 +96,6 @@ public class Tab3_expanded extends AppCompatActivity {
 
         TabLayout tab = (TabLayout) findViewById(R.id.tabs);
         tab.setupWithViewPager(mViewPager);
-
     }
 
     private void setupViewPager(ViewPager viewPager){
@@ -113,9 +114,5 @@ public class Tab3_expanded extends AppCompatActivity {
     }
     public String getStudent_id(){
         return student_id;
-    }
-    public void onBackPressed(){
-        new delete().execute("http://52.78.19.146:8080/lectures/delete");
-        super.onBackPressed();
     }
 }
