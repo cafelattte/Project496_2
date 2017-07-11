@@ -5,26 +5,29 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Created by q on 2017-07-06.
@@ -69,8 +72,8 @@ public class Tab3Fragment extends Fragment{
                 intent.putExtra("name",student_name);
                 intent.putExtra("student_id",student_number);
                 intent.putExtra("major",major);
-                startActivity(intent);
                 new HttpMakeDB().execute("http://52.78.19.146:8080/start");
+                startActivity(intent);
             }
         });
         return view;
@@ -90,6 +93,15 @@ public class Tab3Fragment extends Fragment{
             String res_msg = null;
 
             try {
+//                JSONObject param = new JSONObject();
+//                Reader in = getContext().getResources().openRawResource(R.raw.current);
+                InputStream in = getContext().getResources().openRawResource(R.raw.current);
+                JSONArray job;
+                parse ap = new parse();
+                job = ap.parser2(ap.parse1(in));
+                String body = job.toString();
+                System.out.println(body);
+
                 url = new URL(params[0]);
                 connection = (HttpURLConnection) url.openConnection();
 
@@ -97,17 +109,10 @@ public class Tab3Fragment extends Fragment{
                 connection.setUseCaches(false);
                 connection.setConnectTimeout(10000);
                 connection.setRequestProperty("Content-Type","application/json");
-
                 connection.setDoOutput(true);
 
                 OutputStream os = connection.getOutputStream();
-                InputStream is = getContext().getResources().openRawResource(R.raw.currrent);
-
-                JSONArray job ;
-                parse ap = new parse();
-                job = ap.parser2(ap.parse("currrent.txt"));
-
-                os.write(job.toString().getBytes());
+                os.write(body.getBytes("UTF-8"));
                 os.flush();
                 os.close();
 
@@ -139,7 +144,7 @@ public class Tab3Fragment extends Fragment{
             StringBuilder sb = new StringBuilder();
             BufferedReader br = null;
             try {
-                br = new BufferedReader(new InputStreamReader(in));
+                br = new BufferedReader(new InputStreamReader(in, "euc-kr"));
                 while (true) {
                     String line = br.readLine();
                     if (line == null) break;
@@ -156,6 +161,96 @@ public class Tab3Fragment extends Fragment{
             }
             return sb.toString();
         }
+
+        public class parse {
+            public ArrayList<String[]> parse1(InputStream in) {
+                ArrayList<String> list = new ArrayList<String>();
+                try{
+                    BufferedReader input_br = null;
+                    input_br = new BufferedReader(new InputStreamReader(in, "euc-kr"));
+                    while (true) {
+                        String line = input_br.readLine();
+                        if (line == null) break;
+                        list.add(line);
+                    }
+                } catch (IOException e){
+                    e.printStackTrace();
+                }
+
+                ArrayList<String[]> subjects_w_grade;
+                subjects_w_grade=parser_w_grade(list);//이번학기를 제외한 성적들.[no, 학과, 교과목, 과목번호, 분반, 구분, 교과목명, 학점, au, 재수강, 성적, 영문교과목명]
+
+                return subjects_w_grade;
+            }
+
+            public ArrayList<String[]> parser_w_grade(ArrayList<String> text) {
+                ArrayList<String[]> result = new ArrayList<String[]>();
+                for (int i=0; i<text.size();i++) {
+                    StringTokenizer tokens = new StringTokenizer(text.get(i),"\t");
+                    int count = tokens.countTokens();
+
+                    String[] subject = new String[count];
+
+                    for (int j=0; j< count ; j++) {
+                        subject[j] = tokens.nextToken();}
+
+                    result.add(subject);
+                }
+                return result;
+            }
+
+            public JSONArray parser2(ArrayList<String[]> text){
+                JSONArray result = new JSONArray();
+                for (int i =0; i< text.size(); i++) {
+                    JSONObject object = new JSONObject();
+                    int size = text.get(i).length;//11이면 분반 없음, 12면 분반 있음.
+                    String[] list = text.get(i);
+                    String Grades;
+                    String Course_type;
+                    String Course_title;
+                    String Repeat;
+                    String Course_no;
+                    int AU;
+                    int Credits;
+                    if (size ==11) {//분반 없는 경우
+                        Course_no = list[4];
+                        Course_type = list[5];
+                        Course_title = list[6];
+                        Credits = Integer.parseInt(list[8]);
+                        AU = Integer.parseInt(list[7]);
+                        Grades = "null";
+                        Repeat = list[10];
+                    }
+                    else {
+                        Course_no = list[5];
+                        Course_type = list[6];
+                        Course_title = list[7];
+                        Credits = Integer.parseInt(list[9]);
+                        AU = Integer.parseInt(list[8]);
+                        Grades = "null";
+                        Repeat = list[11];
+                    }
+                    String Depart = list[2];
+                    String Code = list[3];
+                    try {
+                        object.put("Course_no", Course_no);
+                        object.put("Depart",Depart);
+                        object.put("Code",Code);
+                        object.put("Grades",Grades);
+                        object.put("Course_type",Course_type);
+                        object.put("Course_title",Course_title);
+                        object.put("Repeat",Repeat);
+                        object.put("Credits",Credits);
+                        object.put("AU", AU);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    result.put(object);
+                }
+                return result;
+            }
+        }
+
 
         @Override
         public void onPostExecute(String result) {

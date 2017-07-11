@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
 
@@ -15,17 +17,29 @@ import java.util.StringTokenizer;
  */
 
 public class parse {
-    public ArrayList<String[]> parse(String file_path) {
-        File grade = new File("R\\raw",file_path);
+    public parse(){
 
+    }
+    public ArrayList<String[]> parse1(InputStream in) {
         ArrayList<String> list = new ArrayList<String>();
+        try{
+            BufferedReader input_br = null;
+            input_br = new BufferedReader(new InputStreamReader(in));
+            while (true) {
+                String line = input_br.readLine();
+                if (line==null)break;
+                list.add(line);
+            }
+        } catch (IOException e){
+            e.printStackTrace();
+        }
+
         ArrayList<String> subjects = new ArrayList<String>();
         ArrayList<String[]> subjects_w_grade;
-        ArrayList<String[]> subs_wo_grade;
 
         JSONArray bef_Sem = null;//그전 학기의 과목들
         JSONArray now_Sem = null;// 현재 학기의 과목들
-
+/*
         BufferedReader bf  = null;
         try {
             bf = new BufferedReader(new FileReader(grade));//이때까지의 성적들을 보여줌
@@ -41,7 +55,7 @@ public class parse {
         }catch(Exception e) {
             e.printStackTrace();
         }
-
+*/
        /* BufferedReader bf2 = null;
         try {
             bf2 = new BufferedReader(new FileReader(this_semester));
@@ -61,7 +75,7 @@ public class parse {
         //int num_sems = 4;//학기수 . 현재 수강신청한 학기까지 포함.
 
         subjects_w_grade=parser_w_grade(list);//이번학기를 제외한 성적들.[no, 학과, 교과목, 과목번호, 분반, 구분, 교과목명, 학점, au, 재수강, 성적, 영문교과목명]
-        subs_wo_grade= parser_w_grade(subjects);//[No, 신청_구분, 학과, 과목번호, 분반(없을 수 있음), 과목번호, 구분, 교과목, 학점, au, 교수님, 재수강]
+        //subs_wo_grade= parser_w_grade(subjects);//[No, 신청_구분, 학과, 과목번호, 분반(없을 수 있음), 과목번호, 구분, 교과목, 학점, au, 교수님, 재수강]
 
         return subjects_w_grade;
     }
