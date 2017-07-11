@@ -20,6 +20,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -34,6 +36,50 @@ public class Tab3_expanded extends AppCompatActivity {
     private String name;
     private String student_id;
 
+    private class delete extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            URL url = null;
+            HttpURLConnection connection = null;
+            String response = null;
+            try {
+                url = new URL(params[0]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return "Not usable internet address";
+            }
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                if (connection == null) {
+                    return "Cannot connect";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "Cannot connect by IO exception";
+            }
+            try {
+                connection.setRequestMethod("GET");
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+                return "Wrong HTTP request method";
+            }
+            connection.setUseCaches(false);
+            connection.setConnectTimeout(10000);
+            connection.disconnect();
+
+
+            return response;
+        }
+        @Override
+        public void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,5 +114,8 @@ public class Tab3_expanded extends AppCompatActivity {
     public String getStudent_id(){
         return student_id;
     }
-
+    public void onBackPressed(){
+        new delete().execute("http://52.78.19.146:8080/lectures/delete");
+        super.onBackPressed();
+    }
 }

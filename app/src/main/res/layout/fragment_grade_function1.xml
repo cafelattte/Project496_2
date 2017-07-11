@@ -16,13 +16,14 @@
     <ListView
         android:id="@+id/ListView2"
         android:layout_width="match_parent"
-        android:layout_height="530dp" />
+        android:layout_height="450dp" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="TextView" />
+        android:text="TextView"
+        android:layout_weight="1"/>
 
 </LinearLayout>

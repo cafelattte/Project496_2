@@ -1,8 +1,10 @@
 package com.example.q.project496_2;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.UiThread;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -30,6 +32,9 @@ public class grade_function1 extends Fragment {
     private String name;
     private String major;
     private String student_id;
+    private double ex_grade;
+    private int credits;
+    ListView listView;
     JSONArray current;
     listAdapter adapter;
 
@@ -42,91 +47,118 @@ public class grade_function1 extends Fragment {
             student_id = ((Tab3_expanded)getActivity()).getStudent_id();
         }
     }
+    private class httpfunc extends AsyncTask<String, Void, String> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
 
-    public String getRespond(String params) {
-        URL url = null;
-        HttpURLConnection connection = null;
-        String response = null;
-        try {
-            url = new URL(params);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-            return "Not usable internet address";
-        }
-        try {
-            connection = (HttpURLConnection) url.openConnection();
-            if (connection == null) {
-                return "Cannot connect";
+        @Override
+        protected String doInBackground(String... params) {
+            URL url = null;
+            HttpURLConnection connection = null;
+            String response = null;
+            try {
+                url = new URL(params[0]);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+                return "Not usable internet address";
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return "Cannot connect by IO exception";
-        }
-        try {
-            connection.setRequestMethod("GET");
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-            return "Wrong HTTP request method";
-        }
-        connection.setUseCaches(false);
-        connection.setConnectTimeout(10000);
+            try {
+                connection = (HttpURLConnection) url.openConnection();
+                if (connection == null) {
+                    return "Cannot connect";
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "Cannot connect by IO exception";
+            }
+            try {
+                connection.setRequestMethod("GET");
+            } catch (ProtocolException e) {
+                e.printStackTrace();
+                return "Wrong HTTP request method";
+            }
+            connection.setUseCaches(false);
+            connection.setConnectTimeout(10000);
 
-        try {
-            int resCode = connection.getResponseCode();
-            if (HttpURLConnection.HTTP_OK == resCode) {
-                response = getTextFrom(connection.getInputStream());
-            } else {
-                response = connection.getResponseCode() + "-" + connection.getResponseMessage();
+            try {
+                int resCode = connection.getResponseCode();
+                if (HttpURLConnection.HTTP_OK == resCode) {
+                    response = getTextFrom(connection.getInputStream());
+                } else {
+                    response = connection.getResponseCode() + "-" + connection.getResponseMessage();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+            connection.disconnect();
+
+            try {
+                JSONArray array = new JSONArray(response);
+                current = array;
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+            return response;
         }
-        connection.disconnect();
-        return response;
+
+        private String getTextFrom(InputStream in) {
+            StringBuilder sb = new StringBuilder();
+            BufferedReader br = null;
+
+            try {
+                br = new BufferedReader(new InputStreamReader(in));
+
+                while (true) {
+                    String line = br.readLine();
+                    if (line == null) break;
+                    sb.append(line + "\n");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                br.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return sb.toString();
+        }
+
+        @Override
+        public void onPostExecute(String result) {
+            super.onPostExecute(result);
+        }
     }
 
-    private String getTextFrom(InputStream in) {
-        StringBuilder sb = new StringBuilder();
-        BufferedReader br = null;
-
-        try {
-            br = new BufferedReader(new InputStreamReader(in));
-
-            while (true) {
-                String line = br.readLine();
-                if (line == null) break;
-                sb.append(line + "\n");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            br.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return sb.toString();
+    @Override
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_grade_function1,container,false);
-        String res = getRespond("http://52.78.19.146:8080/lectures/all");
+        new httpfunc().execute("http://52.78.19.146:8080/lectures/all");
 
         TextView info = (TextView)view.findViewById(R.id.textView2);
         info.setText("학과: "+major+" 이름: "+name +" 학번: "+student_id);
 
         TextView expect = (TextView)view.findViewById(R.id.textView8);
 
-        ListView listView = (ListView)view.findViewById(R.id.ListView2);
-
+        listView = (ListView)view.findViewById(R.id.ListView2);
         adapter = new listAdapter(getContext(),current);
+
         listView.setAdapter(adapter);
-        double ex_grade= adapter.average();
-        int credits = adapter.getCredits();
-        expect.setText("학점 수강 : "+credits+"예상 학점 : "+ex_grade);
+
+        credits = adapter.getCredits();
+        ex_grade = adapter.average();
+        expect.setText("학점 수강 : "+Integer.toString(credits)+"예상 학점 : "+Double.toString(ex_grade));
 
         return view;
     }
@@ -149,22 +181,27 @@ public class grade_function1 extends Fragment {
         }
         return my_grade;
     }
-
 }
 class listAdapter extends BaseAdapter {
     private Context mContext;
     private JSONArray json;
     private String[] grades;
     int credits;
+    int length;
 
     public listAdapter(Context context,JSONArray subject_list){
         mContext= context;
         json = subject_list;
-        grades = new String[json.length()];
+        if( json==null){
+            length = 0;
+        }else{
+            length= json.length();
+        }
+        grades = new String[length];
         credits = 0;
     }
     public int getCount(){
-        return json.length();
+        return length;
     }
     public int getCredits(){
         return credits;
@@ -206,10 +243,11 @@ class listAdapter extends BaseAdapter {
             String sn = temp.getString("Course_title");
             int cred = temp.getInt("Credits");
             subject_name.setText(sn);
-            credits.setText(cred);
+            credits.setText(Integer.toString(cred));
         }catch (Exception e){
             e.printStackTrace();
         }
+        notifyDataSetChanged();
         return convertView;
     }
 
@@ -217,7 +255,7 @@ class listAdapter extends BaseAdapter {
         double average= 0;
         int credits = 0;
         double grade = 0;
-        for (int i =0; i<json.length(); i++){
+        for (int i =0; i<length; i++){
             try {
                 JSONObject item = (JSONObject) json.get(i);
                 grade = grade(grades[i]);
