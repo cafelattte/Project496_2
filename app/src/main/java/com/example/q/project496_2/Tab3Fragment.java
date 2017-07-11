@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -121,6 +122,15 @@ public class Tab3Fragment extends Fragment{
                     os.write(body.getBytes("UTF-8"));
                     os.flush();
                     os.close();
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                    StringBuffer buffer = new StringBuffer();
+                    String line = null;
+                    while ((line = reader.readLine()) != null) {
+                        buffer.append(line).append("\r\n");
+                    }
+                    reader.close();
+                    Log.d("reader", body);
 
                     int resCode = connection.getResponseCode();
                     if (HttpURLConnection.HTTP_OK == resCode) {
