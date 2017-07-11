@@ -27,8 +27,8 @@ public class grade_function1 extends Fragment {
     private String name;
     private String major;
     private String student_id;
-    JSONArray current;
     listAdapter adapter;
+    JSONArray current;
 
     @Override
     public void onAttach(Context context){
@@ -43,6 +43,7 @@ public class grade_function1 extends Fragment {
     public String getRespond(String params) {
         URL url = null;
         HttpURLConnection connection = null;
+        BufferedReader reader = null ;
         try {
             url = new URL(params);
         } catch (MalformedURLException e) {
@@ -55,15 +56,15 @@ public class grade_function1 extends Fragment {
             connection.setUseCaches(false);
             connection.setConnectTimeout(10000);
 
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-            StringBuffer buffer = new StringBuffer();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line).append("\r\n");
-            }
 
             int resCode = connection.getResponseCode();
             if (HttpURLConnection.HTTP_OK == resCode) {
+                reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+                StringBuffer buffer = new StringBuffer();
+                String line = null;
+                while ((line = reader.readLine()) != null) {
+                    buffer.append(line).append("\r\n");
+                }
                 return reader.toString();
             } else {
                 return connection.getResponseCode() + "-" + connection.getResponseMessage();
@@ -74,7 +75,7 @@ public class grade_function1 extends Fragment {
         if (connection != null) {
             connection.disconnect();
         }
-        return "not reach here";
+        return reader.toString();
     }
 
     @Nullable
@@ -83,6 +84,11 @@ public class grade_function1 extends Fragment {
         View view = inflater.inflate(R.layout.fragment_grade_function1,container,false);
         String res = getRespond("http://52.78.19.146:8080/lectures/all");
 
+        try {
+            current = new JSONArray(res);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         TextView info = (TextView)view.findViewById(R.id.textView2);
         info.setText("학과: "+major+" 이름: "+name +" 학번: "+student_id);
 
@@ -123,15 +129,25 @@ class listAdapter extends BaseAdapter {
     private Context mContext;
     private JSONArray json;
     private String[] grades;
+    int length;
     int credits;
 
     public listAdapter(Context context,JSONArray subject_list){
         mContext= context;
         json = subject_list;
-        grades = new String[json.length()];
+        length =0;
+        if (json== null){
+            length =0;
+        }else{
+            length = json.length();
+        }
+        grades = new String[length];
         credits = 0;
     }
     public int getCount(){
+        if (json ==null){
+            return 0;
+        }
         return json.length();
     }
     public int getCredits(){
@@ -185,7 +201,7 @@ class listAdapter extends BaseAdapter {
         double average= 0;
         int credits = 0;
         double grade = 0;
-        for (int i =0; i<json.length(); i++){
+        for (int i =0; i<length; i++){
             try {
                 JSONObject item = (JSONObject) json.get(i);
                 grade = grade(grades[i]);
