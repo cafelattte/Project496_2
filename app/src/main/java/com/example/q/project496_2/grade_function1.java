@@ -17,9 +17,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
 
 public class grade_function1 extends Fragment {
@@ -43,6 +46,7 @@ public class grade_function1 extends Fragment {
     public String getRespond(String params) {
         URL url = null;
         HttpURLConnection connection = null;
+        String response = null;
         try {
             url = new URL(params);
         } catch (MalformedURLException e) {
@@ -51,30 +55,58 @@ public class grade_function1 extends Fragment {
         }
         try {
             connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
-            connection.setUseCaches(false);
-            connection.setConnectTimeout(10000);
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
-            StringBuffer buffer = new StringBuffer();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                buffer.append(line).append("\r\n");
+            if (connection == null) {
+                return "Cannot connect";
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Cannot connect by IO exception";
+        }
+        try {
+            connection.setRequestMethod("GET");
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            return "Wrong HTTP request method";
+        }
+        connection.setUseCaches(false);
+        connection.setConnectTimeout(10000);
 
+        try {
             int resCode = connection.getResponseCode();
             if (HttpURLConnection.HTTP_OK == resCode) {
-                return reader.toString();
+                response = getTextFrom(connection.getInputStream());
             } else {
-                return connection.getResponseCode() + "-" + connection.getResponseMessage();
+                response = connection.getResponseCode() + "-" + connection.getResponseMessage();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if (connection != null) {
-            connection.disconnect();
+        connection.disconnect();
+        return response;
+    }
+
+    private String getTextFrom(InputStream in) {
+        StringBuilder sb = new StringBuilder();
+        BufferedReader br = null;
+
+        try {
+            br = new BufferedReader(new InputStreamReader(in));
+
+            while (true) {
+                String line = br.readLine();
+                if (line == null) break;
+                sb.append(line + "\n");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return "not reach here";
+        try {
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return sb.toString();
     }
 
     @Nullable
