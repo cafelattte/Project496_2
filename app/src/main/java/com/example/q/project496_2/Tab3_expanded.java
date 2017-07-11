@@ -1,5 +1,6 @@
 package com.example.q.project496_2;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,7 +8,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,7 +34,7 @@ public class Tab3_expanded extends AppCompatActivity {
     private String name;
     private String student_id;
     private EditText waitText;
-    private Button btnTest3  = null;
+    private Button btnTest3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -52,16 +52,8 @@ public class Tab3_expanded extends AppCompatActivity {
         tab.setupWithViewPager(mViewPager);
 
         waitText = (EditText) findViewById(R.id.waitText);
-        getViews();
-        setListeners();
-    }
-
-    private void getViews() {
-        this.btnTest3 = (Button) findViewById(R.id.btnTest3);
-    }
-
-    private void setListeners() {
-        this.btnTest3.setOnClickListener(new OnClickListener() {
+        btnTest3 = (Button) findViewById(R.id.btnTest3);
+        btnTest3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 new HttpMakeDB().execute("http://52.78.19.146:8080/lectures");
@@ -96,18 +88,10 @@ public class Tab3_expanded extends AppCompatActivity {
 
                 OutputStream os = connection.getOutputStream();
                 InputStream is = getApplicationContext().getResources().openRawResource(R.raw.currrent);
-                StringBuilder input_sb = new StringBuilder();
-                BufferedReader input_br = null;
-                input_br = new BufferedReader(new InputStreamReader(is));
-                while (true) {
-                    String line = input_br.readLine();
-                    if (line == null) break;
-                    input_sb.append(line + "\n");
-                }
 
                 JSONArray job ;
                 parse ap = new parse();
-                job = ap.parser2(ap.parse(input_sb.toString()));
+                job = ap.parser2(ap.parse("currrent.txt"));
 
                 os.write(job.toString().getBytes());
                 os.flush();
