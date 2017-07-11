@@ -1,10 +1,9 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.q.project496_2.grade_function1">
-
-    <!-- TODO: Update blank fragment layout -->
+    tools:context="com.example.q.project496_2.grade_function1"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/textView2"
@@ -17,5 +16,13 @@
     <ListView
         android:id="@+id/ListView2"
         android:layout_width="match_parent"
-        android:layout_height="540dp" />
-</FrameLayout>
+        android:layout_height="530dp" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="TextView" />
+
+</LinearLayout>

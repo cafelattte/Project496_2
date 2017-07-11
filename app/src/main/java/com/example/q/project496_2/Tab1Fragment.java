@@ -108,7 +108,7 @@ public class Tab1Fragment extends Fragment{
             Bundle parameters = new Bundle();
             parameters.putString("fields","taggable_friends");
             parameters.putInt("limit",5000);
-            String path = "/me/taggable_friends?fields=name,picture&limit=1000";
+            String path = "/me/taggable_friends?fields=name&edges=picture&limit=1000";
             //request = new GraphRequest(mToken, path, null, HttpMethod.GET, graphCallback);
             request = GraphRequest.newMeRequest(mToken,jsonObjectCallback);
             request.setParameters(parameters);
@@ -198,7 +198,6 @@ public class Tab1Fragment extends Fragment{
     GraphRequest.Callback graphCallback = new GraphRequest.Callback(){
             @Override
             public void onCompleted(GraphResponse response){
-                Log.d("TAG","페이스북 로그인 결과"+response.toString());
                 JSONObject object = response.getJSONObject();
                 try{
                     friends_array = object.getJSONArray("data");

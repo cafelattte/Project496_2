@@ -106,12 +106,10 @@ public class CustomAddressAdapter extends BaseAdapter {
             for (int j=facebook.size()-1; j>=0; j--){
                 CustomAddress ad1 = contacts.get(i);
                 CustomAddress ad2 = facebook.get(j);
-                Log.d("NAME",ad1.getAdrsname()+" "+ad2.getAdrsname());
                 if (ad1.getAdrsname().trim().equals(ad2.getAdrsname().trim())){
                     ad1.setAdrsimage(ad2.getUri());
                     facebook.remove(j);
                     customAddressList.remove(ad2);
-                    Log.d("NAME",ad1.getAdrsname());
                 }
             }
         }
