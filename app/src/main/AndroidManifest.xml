@@ -44,5 +44,6 @@
         <activity android:name=".Tab3_expanded"
             android:theme="@style/AppTheme.NoActionBar"
             ></activity>
+        <activity android:name=".StylizedFontActivity" />
     </application>
 </manifest>

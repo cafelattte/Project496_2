@@ -1,13 +1,136 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="10dp"
     tools:context="com.example.q.project496_2.grade_function2">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/btn1"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="기초"
+            android:textSize="20dp"/>
+        <Button
+            android:id="@+id/btn2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="전공"
+            android:textSize="20dp"/>
+        <Button
+            android:id="@+id/btn3"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="교양/영어"
+            android:textSize="16dp"/>
+        <Button
+            android:id="@+id/btn4"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="운동/리더십"
+            android:textSize="15dp"/>
+    </LinearLayout>
+    <ImageView
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:src="#00af87"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="필수"
+        android:textSize="30dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="YES"
+            android:textSize="28dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="NO"
+            android:textSize="28dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/mend_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ListView>
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:src="#00af87"/>
+        <ListView
+            android:id="@+id/mend_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ListView>
 
-</FrameLayout>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="선택"
+        android:textSize="30dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="28dp">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="YES"
+            android:textSize="28dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="NO"
+            android:textSize="28dp"/>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:orientation="horizontal">
+        <ListView
+            android:id="@+id/mend_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ListView>
+        <ImageView
+            android:layout_width="8dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:src="#00af87"/>
+        <ListView
+            android:id="@+id/mend_no"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </ListView>
+
+    </LinearLayout>
+
+
+</LinearLayout>

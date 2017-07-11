@@ -50,23 +50,16 @@
 
         <ImageView
             android:id="@+id/adrs_pbimg"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="#78E9F8" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/logo1" />
 
         <ImageView
             android:id="@+id/adrs_fbimg"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:src="#FBEA46" />
-
-        <ImageView
-            android:id="@+id/adrs_glimg"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:src="#42E2A8" />
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/logo2" />
     </LinearLayout>
 
 </LinearLayout>

@@ -2,6 +2,7 @@ package com.example.q.project496_2;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
