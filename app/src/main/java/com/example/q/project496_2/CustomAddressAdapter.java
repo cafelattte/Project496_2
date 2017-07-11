@@ -56,10 +56,23 @@ public class CustomAddressAdapter extends BaseAdapter {
             LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.customaddress, parent, false);
         }
-
+        ImageView facebook_iv = (ImageView)convertView.findViewById(R.id.adrs_pbimg);
+        ImageView contact = (ImageView)convertView.findViewById(R.id.adrs_fbimg);
         ImageView adrs_image = (ImageView) convertView.findViewById(R.id.adrs_image);
         TextView adrs_name = (TextView) convertView.findViewById(R.id.adrs_name);
         TextView adrs_number = (TextView) convertView.findViewById(R.id.adrs_number);
+        CustomAddress ad = customAddressList.get(position);
+        if (contacts.contains(ad)){
+            contact.setVisibility(View.VISIBLE);
+        }else{
+            contact.setVisibility(View.INVISIBLE);
+        }
+        if (facebook.contains(ad)){
+            facebook_iv.setVisibility(View.VISIBLE);
+        }else{
+            facebook_iv.setVisibility(View.INVISIBLE);
+        }
+
 
         CustomAddress customAddress = customAddressList.get(i);
 
@@ -108,7 +121,8 @@ public class CustomAddressAdapter extends BaseAdapter {
                 CustomAddress ad2 = facebook.get(j);
                 if (ad1.getAdrsname().trim().equals(ad2.getAdrsname().trim())){
                     ad1.setAdrsimage(ad2.getUri());
-                    facebook.remove(j);
+                    facebook.set(j,ad1);
+                    facebook.remove(ad2);
                     customAddressList.remove(ad2);
                 }
             }

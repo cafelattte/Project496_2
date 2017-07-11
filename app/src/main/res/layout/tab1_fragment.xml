@@ -5,11 +5,13 @@
     android:layout_height="match_parent"
     android:paddingTop="20dp"
     android:paddingBottom="20dp">
+
     <com.facebook.login.widget.LoginButton
         android:id="@+id/login_button"
-        android:layout_width = "wrap_content"
+        style="@style/com_facebook_button"
+        android:layout_width="wrap_content"
         android:layout_height="36dp"
-        android:layout_gravity = "center_horizontal" />
+        android:layout_gravity="center_horizontal" />
 
     <ListView
         android:id="@+id/tab1_listview"
