@@ -10,8 +10,11 @@
         android:id="@+id/login_button"
         style="@style/com_facebook_button"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginBottom="10dp"
+        android:gravity="center_vertical"
+        android:layout_gravity="center_vertical"/>
 
     <ListView
         android:id="@+id/tab1_listview"
