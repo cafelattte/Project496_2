@@ -16,15 +16,11 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.IOException;
-
-import okhttp3.Call;
-import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Callback;
-import okhttp3.Response;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class grade_function1 extends Fragment {
 
@@ -43,34 +39,49 @@ public class grade_function1 extends Fragment {
             student_id = ((Tab3_expanded)getActivity()).getStudent_id();
         }
     }
-    OkHttpClient client = new OkHttpClient();
-    HttpUrl present_url = new HttpUrl.Builder().scheme("http").host("52.78.19.146").port(8080).addPathSegment("lectures").addPathSegment("all").build();
 
-    Request request = new Request.Builder().url(present_url).build();
+    public String getRespond(String params) {
+        URL url = null;
+        HttpURLConnection connection = null;
+        try {
+            url = new URL(params);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            return "Not usable internet address";
+        }
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setUseCaches(false);
+            connection.setConnectTimeout(10000);
 
-    private Callback callbackAfterMessage = new Callback(){
-        @Override
-        public void onFailure(Call call, IOException e){
-            Log.d("error",e.getMessage());
+            BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), "UTF-8"));
+            StringBuffer buffer = new StringBuffer();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                buffer.append(line).append("\r\n");
+            }
+
+            int resCode = connection.getResponseCode();
+            if (HttpURLConnection.HTTP_OK == resCode) {
+                return reader.toString();
+            } else {
+                return connection.getResponseCode() + "-" + connection.getResponseMessage();
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        public void onResponse(Call call,Response response) throws IOException{
-            String array  = response.body().string();
-            try {
-                JSONArray array_2 = new JSONArray(array);
-                current = array_2;
-
-            }catch(Exception e){
-                e.printStackTrace();
-            }
+        if (connection != null) {
+            connection.disconnect();
         }
-    };
+        return "not reach here";
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.fragment_grade_function1,container,false);
-        client.newCall(request).enqueue(callbackAfterMessage);
+        String res = getRespond("http://52.78.19.146:8080/lectures/all");
 
         TextView info = (TextView)view.findViewById(R.id.textView2);
         info.setText("학과: "+major+" 이름: "+name +" 학번: "+student_id);

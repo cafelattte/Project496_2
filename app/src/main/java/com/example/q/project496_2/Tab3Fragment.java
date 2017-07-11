@@ -130,7 +130,6 @@ public class Tab3Fragment extends Fragment{
                         buffer.append(line).append("\r\n");
                     }
                     reader.close();
-                    Log.d("reader", body);
 
                     int resCode = connection.getResponseCode();
                     if (HttpURLConnection.HTTP_OK == resCode) {
