@@ -1,9 +1,11 @@
 package com.example.q.project496_2;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.net.URI;
 import java.util.ArrayList;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -23,6 +26,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class CustomAddressAdapter extends BaseAdapter {
     private ArrayList<CustomAddress> customAddressList = new ArrayList<CustomAddress>();
+    private ArrayList<CustomAddress> facebook = new ArrayList<CustomAddress>();
+    private ArrayList<CustomAddress> contacts = new ArrayList<CustomAddress>();
 
     public CustomAddressAdapter() {
     }
@@ -66,22 +71,51 @@ public class CustomAddressAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void addAddress(int img, String name, String number) {
+    public void addAddress(int img, String name, String number, String tag) {
         CustomAddress address = new CustomAddress();
 
         address.setAdrsimage(img);
         address.setAdrsname(name);
         address.setAdrsnumber(number);
-
+        address.setTag(tag);
+        if (tag =="facebook"){
+            facebook.add(address);
+        }else if(tag =="contacts"){
+            contacts.add(address);
+        }
         customAddressList.add(address);
     }
-    public void addAddress(Uri uri, String name, String number){
+    public void addAddress(Uri uri, String name, String number,String tag){
         CustomAddress address = new CustomAddress();
 
         address.setAdrsimage(uri);
         address.setAdrsname(name);
         address.setAdrsnumber(number);
-
+        address.setTag(tag);
+        if (tag =="facebook"){
+            facebook.add(address);
+        }else if(tag =="contacts"){
+            contacts.add(address);
+        }
         customAddressList.add(address);
     }
+
+    public void check_Same(){
+        Log.d("TAG","ENter is okay");
+        for (int i =0 ; i<contacts.size(); i++){
+            for (int j=facebook.size()-1; j>=0; j--){
+                CustomAddress ad1 = contacts.get(i);
+                CustomAddress ad2 = facebook.get(j);
+                Log.d("NAME",ad1.getAdrsname()+" "+ad2.getAdrsname());
+                if (ad1.getAdrsname().trim().equals(ad2.getAdrsname().trim())){
+                    ad1.setAdrsimage(ad2.getUri());
+                    facebook.remove(j);
+                    customAddressList.remove(ad2);
+                    Log.d("NAME",ad1.getAdrsname());
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 }
