@@ -79,11 +79,15 @@ public class Tab3_expanded extends AppCompatActivity {
                 connection.setRequestMethod("POST");
                 connection.setUseCaches(false);
                 connection.setConnectTimeout(10000);
-                connection.setRequestProperty("Content-Type", "text/plain");
+                connection.setRequestProperty("과", "뭐");
+                
                 connection.setDoOutput(true);
 
                 OutputStream os = connection.getOutputStream();
-                InputStream 
+                InputStream is = getApplicationContext().getResources().openRawResource(R.raw.currrent);
+
+
+
 
                 os.write(@string/);
                 os.close();
