@@ -1,7 +1,7 @@
 package com.example.q.project496_2;
 
 import org.json.JSONArray;
-
+import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -15,9 +15,8 @@ import java.util.StringTokenizer;
  */
 
 public class parse {
-    public void parse(String[] args) {
-        File grade = new File("C:\\Users\\q\\Downloads","이때까지의 성적.txt");
-        File this_semester = new File("C:\\Users\\q\\Downloads","수강신청.txt");
+    public ArrayList<String[]> parse(String file_path) {
+        File grade = new File("R\\raw",file_path);
 
         ArrayList<String> list = new ArrayList<String>();
         ArrayList<String> subjects = new ArrayList<String>();
@@ -43,7 +42,7 @@ public class parse {
             e.printStackTrace();
         }
 
-        BufferedReader bf2 = null;
+       /* BufferedReader bf2 = null;
         try {
             bf2 = new BufferedReader(new FileReader(this_semester));
             String line;
@@ -57,17 +56,14 @@ public class parse {
             e.printStackTrace();
         }catch(Exception e) {
             e.printStackTrace();
-        }
+        }*/
 
-        int num_sems = 4;//학기수 . 현재 수강신청한 학기까지 포함.
+        //int num_sems = 4;//학기수 . 현재 수강신청한 학기까지 포함.
 
         subjects_w_grade=parser_w_grade(list);//이번학기를 제외한 성적들.[no, 학과, 교과목, 과목번호, 분반, 구분, 교과목명, 학점, au, 재수강, 성적, 영문교과목명]
         subs_wo_grade= parser_w_grade(subjects);//[No, 신청_구분, 학과, 과목번호, 분반(없을 수 있음), 과목번호, 구분, 교과목, 학점, au, 교수님, 재수강]
 
-        ArrayList<String> one= parser(subjects_w_grade);
-        ArrayList<String> two = parser2(subs_wo_grade);
-        System.out.println(one.toString());
-        System.out.println(two.toString());
+        return subjects_w_grade;
     }
 
     public ArrayList<String[]> parser_w_grade(ArrayList<String> text) {
@@ -86,7 +82,7 @@ public class parse {
         return result;
     }
 
-    public ArrayList<String> parser(ArrayList<String[]> text){//이전 학기용
+    public JSONArray parser(ArrayList<String[]> text){//이전 학기용
         ArrayList<Integer> ho = new ArrayList<Integer>();
         for (int i =0; i<text.size(); i++) {
             if (text.get(i).length==1) {
@@ -99,8 +95,9 @@ public class parse {
             text.remove(index);
         }
 
-        ArrayList<String> result = new ArrayList<String>();
+        JSONArray result = new JSONArray();
         for (int i =0; i< text.size(); i++) {
+            JSONObject object = new JSONObject();
             int size = text.get(i).length;//11이면 분반 없음, 12면 분반 있음.
             String[] list = text.get(i);
             String Grades;
@@ -128,15 +125,27 @@ public class parse {
             String Depart = list[1];
             String Code = list[2];
             String Course_no = list[3];
-            String object = "{Depart:"+Depart+"\nCode:"+Code+"\nCourse_no:"+Course_no+"\nCourse_type:"+Course_type+"\nCourse_title"+Course_title+"\nCredits:"+Credits
-                    +"\nAU:"+AU+"\nGrades:"+Grades+"\nRepeat:"+Repeat+"}";
-            result.add(object);
+            try {
+                object.put("Course_no", Course_no);
+                object.put("Depart",Depart);
+                object.put("Code",Code);
+                object.put("Grades",Grades);
+                object.put("Course_type",Course_type);
+                object.put("Course_title",Course_title);
+                object.put("Repeat",Repeat);
+                object.put("Credits",Credits);
+                object.put("AU", AU);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            result.put(object);
         }
         return result;
     }
-    public ArrayList<String> parser2(ArrayList<String[]> text){
-        ArrayList<String> result = new ArrayList<String>();
+    public JSONArray parser2(ArrayList<String[]> text){
+        JSONArray result = new JSONArray();
         for (int i =0; i< text.size(); i++) {
+            JSONObject object = new JSONObject();
             int size = text.get(i).length;//11이면 분반 없음, 12면 분반 있음.
             String[] list = text.get(i);
             String Grades;
@@ -166,9 +175,20 @@ public class parse {
             }
             String Depart = list[2];
             String Code = list[3];
-            String object = "{Depart:"+Depart+"\nCode:"+Code+"\nCourse_no:"+Course_no+"\nCourse_type:"+Course_type+"\nCourse_title"+Course_title+"\nCredits:"+Credits
-                    +"\nAU:"+AU+"\nGrades:"+Grades+"\nRepeat:"+Repeat+"}";
-            result.add(object);
+            try {
+                object.put("Course_no", Course_no);
+                object.put("Depart",Depart);
+                object.put("Code",Code);
+                object.put("Grades",Grades);
+                object.put("Course_type",Course_type);
+                object.put("Course_title",Course_title);
+                object.put("Repeat",Repeat);
+                object.put("Credits",Credits);
+                object.put("AU", AU);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            result.put(object);
         }
         return result;
     }

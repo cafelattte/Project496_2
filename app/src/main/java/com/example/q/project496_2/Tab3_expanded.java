@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,6 +21,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 /**
  * Created by q on 2017-07-10.
@@ -79,17 +82,19 @@ public class Tab3_expanded extends AppCompatActivity {
                 connection.setRequestMethod("POST");
                 connection.setUseCaches(false);
                 connection.setConnectTimeout(10000);
-                connection.setRequestProperty("과", "뭐");
+                connection.setRequestProperty("Content-Type","application/json");
                 
                 connection.setDoOutput(true);
 
                 OutputStream os = connection.getOutputStream();
                 InputStream is = getApplicationContext().getResources().openRawResource(R.raw.currrent);
 
+                JSONArray job ;
+                parse ap = new parse();
+                job = ap.parser2(ap.parse("currrent.txt"));
 
-
-
-                os.write(@string/);
+                os.write(job.toString().getBytes());
+                os.flush();
                 os.close();
 
                 int resCode = connection.getResponseCode();
