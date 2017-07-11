@@ -34,6 +34,7 @@ public class grade_function1 extends Fragment {
     private String student_id;
     private double ex_grade;
     private int credits;
+    TextView expect;
     ListView listView;
     JSONArray current;
     listAdapter adapter;
@@ -149,18 +150,20 @@ public class grade_function1 extends Fragment {
         TextView info = (TextView)view.findViewById(R.id.textView2);
         info.setText("학과: "+major+" 이름: "+name +" 학번: "+student_id);
 
-        TextView expect = (TextView)view.findViewById(R.id.textView8);
+        expect = (TextView)view.findViewById(R.id.textView8);
 
         listView = (ListView)view.findViewById(R.id.ListView2);
         adapter = new listAdapter(getContext(),current);
 
         listView.setAdapter(adapter);
 
+        setting();
+        return view;
+    }
+    public void setting(){
         credits = adapter.getCredits();
         ex_grade = adapter.average();
         expect.setText("학점 수강 : "+Integer.toString(credits)+"예상 학점 : "+Double.toString(ex_grade));
-
-        return view;
     }
     private double grade(String Grade){
         double my_grade = 0;
@@ -247,7 +250,7 @@ class listAdapter extends BaseAdapter {
         }catch (Exception e){
             e.printStackTrace();
         }
-        notifyDataSetChanged();
+        new grade_function1().setting();
         return convertView;
     }
 
