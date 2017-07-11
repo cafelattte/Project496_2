@@ -83,6 +83,8 @@ public class Tab3_expanded extends AppCompatActivity {
                 connection.setDoOutput(true);
 
                 OutputStream os = connection.getOutputStream();
+                InputStream 
+
                 os.write(@string/);
                 os.close();
 

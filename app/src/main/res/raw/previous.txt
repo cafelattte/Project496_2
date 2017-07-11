@@ -1,0 +1,44 @@
+0 년 기이수											
+NO	학과	교과목	과목번호	분반	구분	교과목명	학점	AU	재수강	성적	영문교과목명
+1	AP 교과목	9.118	KSA118		자선	일반천문학	3	0	N	S	General Astronomy
+2	AP 교과목	9.119	KSA119		자선	일반 천문학 실험	1	0	N	A0	General Astronomy Lab
+3	인문사회과학과	10.022	HSS022		교필	English Presentation & Discussion	1	0	N	S	English Presentation & Discussion
+4	인문사회과학과	10.023	HSS023		교필	Advanced English Listening	1	0	N	S	Advanced English Listening
+5	인문사회과학과	10.024	HSS024		교필	Advanced English Writing	1	0	N	S	Advanced English Writing
+6	인문사회과학과	10.025	HSS025		교필	Advanced English Reading	1	0	N	S	Advanced English Reading
+7	인문사회과학부	10.223	HSS167		인선	한국문학과사회	3	0	N	A-	Korean Literature and Society
+8	AP 교과목	23.101	CH101		기필	일반화학 I	3	0	N	S	General Chemistry I
+9	AP 교과목	23.102	CH102		기필	일반화학실험 I	1	0	N	A0	General Chemistry Experiment I
+10	AP 교과목	23.103	CH103		기선	일반화학Ⅱ	3	0	N	S	General Chemistry II
+11	AP 교과목	23.104	CH104		기선	일반화학실험Ⅱ	1	0	N	A+	General Chemistry Experiment II
+12	AP 교과목	25.101	MAS101		기필	미적분학 I	3	0	N	A0	Calculus 1
+13	AP 교과목	25.102	MAS102		기필	미적분학Ⅱ	3	0	N	A0	Calculus II
+14	AP 교과목	36.101	CS101		기필	프로그래밍기초	3	0	N	A+	Introduction to Programming
+15	전산학부	36.204	CS204		전필	이산구조	3	0	N	A-	Discrete Mathematics
+?2016 년 봄학기											
+NO	학과	교과목	과목번호	분반	구분	교과목명	학점	AU	재수강	성적	영문교과목명
+1	인문사회과학부	10.09	HSS090	3	교필	즐거운 대학생활	0	1	N	S	Happy College Life
+2	물리학과	20.141	PH141	D	기필	일반물리학 I	3	0	N	B+	General Physics I
+3	생명과학과	21.12	BS120	B	기필	일반생물학	3	0	N	A+	General Biology
+4	수리과학과	25.109	MAS109	C	기선	선형대수학개론	3	0	N	B+	Introduction to Linear Algebra
+5	산업및시스템공학과	31.101	IE101	A	기선	OR개론	3	0	N	B+	Introduction to Operations Research
+6	전산학부	36.206	CS206	C	전필	데이타구조	3	0	N	A0	Data Structure
+?2016 년 가을학기											
+NO	학과	교과목	과목번호	분반	구분	교과목명	학점	AU	재수강	성적	영문교과목명
+1	인문사회과학부	10.091	HSS091	3	교필	신나는 대학생활	0	1	N	S	Exciting College Life
+2	인문사회과학부	10.11	HSS189	J	자선	새내기 세미나 2<바이오및뇌공학과>	1	0	N	S	Freshman Seminar 2<Dept. of Bio and Brain Engineering >
+3	인문사회과학부	10.174	HSS062	J	교필	인성/리더십 III<발성교실>	0	1	N	S	Humanity/Leadership III<Vocalization Class>
+4	인문사회과학부	10.321	HSS362	A	인선	예술학특강 <실내악>	3	0	N	B+	Special Lectures on Art < Chamber Music Class>
+5	물리학과	20.151	PH151	I	기필	일반물리학실험Ⅰ	1	0	N	W	General Physics Lab. I
+6	전산학부	36.23	CS230		전선	시스템프로그래밍	3	0	N	A-	System Programming
+7	전산학부	36.3	CS300		전필	알고리즘 개론	3	0	N	B+	Introduction to Algorithms
+8	전산학부	36.32	CS320		전필	프로그래밍언어	3	0	N	A-	Programming Language
+?2017 년 봄학기											
+NO	학과	교과목	과목번호	분반	구분	교과목명	학점	AU	재수강	성적	영문교과목명
+1	인문사회과학부	10.051	HSS051	A	교필	체력육성	0	2	N	S	Fitness Promotion
+2	인문사회과학부	10.154	HSS178	A	인선	중국어 회화	3	0	N	A+	Chinese Conversation
+3	인문사회과학부	10.179	HSS070		교필	윤리 및 안전 II	0	1	N	S	Ethics and Safety II
+4	물리학과	20.142	PH142	B	기필	일반 물리학 II	3	0	N	A-	General Physics II
+5	수리과학과	25.212	MAS212		전선	선형대수학	3	0	N	W	Linear Algebra
+6	전산학부	36.211	CS211		전선	디지탈시스템 및 실험	4	0	N	A+	Digital System and Lab
+7	전산학부	36.311	CS311		전필	전산기조직	3	0	N	A+	Computer Organization
