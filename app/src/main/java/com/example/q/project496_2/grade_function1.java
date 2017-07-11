@@ -161,6 +161,7 @@ public class grade_function1 extends Fragment {
         return view;
     }
     public void setting(){
+        if (adapter== null)return ;
         credits = adapter.getCredits();
         ex_grade = adapter.average();
         expect.setText("학점 수강 : "+Integer.toString(credits)+"예상 학점 : "+Double.toString(ex_grade));
