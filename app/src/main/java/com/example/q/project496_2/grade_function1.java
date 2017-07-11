@@ -149,19 +149,27 @@ public class grade_function1 extends Fragment {
 
         TextView info = (TextView)view.findViewById(R.id.textView2);
         info.setText("학과: "+major+" 이름: "+name +" 학번: "+student_id);
-
+        adapter = new listAdapter(getContext(),current);
         expect = (TextView)view.findViewById(R.id.textView8);
 
         listView = (ListView)view.findViewById(R.id.ListView2);
-        adapter = new listAdapter(getContext(),current);
 
         listView.setAdapter(adapter);
 
-        setting();
         return view;
     }
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState){
+        super.onActivityCreated(savedInstanceState);
+        setting();
+    }
+    @Override
+    public void onPause(){
+        super.onPause();
+        setting();
+    }
     public void setting(){
-        if (adapter== null)return ;
+        if (adapter== null) return;
         credits = adapter.getCredits();
         ex_grade = adapter.average();
         expect.setText("학점 수강 : "+Integer.toString(credits)+"예상 학점 : "+Double.toString(ex_grade));
@@ -202,6 +210,9 @@ class listAdapter extends BaseAdapter {
             length= json.length();
         }
         grades = new String[length];
+        for (int i =0; i<length ; i++){
+            grades[i]="A+";
+        }
         credits = 0;
     }
     public int getCount(){
@@ -237,6 +248,8 @@ class listAdapter extends BaseAdapter {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id){
                 String str = (String)spinner.getSelectedItem();
                 grades[position]= str;
+                notifyDataSetChanged();
+                new grade_function1().setting();
             }
             public void onNothingSelected(AdapterView<?> arg0){
                 Log.d("Nothing","Selected");
@@ -251,7 +264,6 @@ class listAdapter extends BaseAdapter {
         }catch (Exception e){
             e.printStackTrace();
         }
-        new grade_function1().setting();
         return convertView;
     }
 
